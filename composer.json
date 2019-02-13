@@ -1,6 +1,6 @@
 {
-  "name": "bnbwebexpertise/laravel-attachments",
-  "description": "Laravel package to link file attachment to models",
+  "name": "phoenixfire296/laravel-attachments",
+  "description": "Laravel package to link file attachment to models leveraging Eloquent SoftDelete",
   "type": "package",
   "license": "MIT",
   "authors": [

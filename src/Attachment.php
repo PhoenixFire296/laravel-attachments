@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Crypt;
 use File as FileHelper;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Storage;
 use Symfony\Component\HttpFoundation\File\File as FileObj;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -35,6 +36,7 @@ use Bnb\Laravel\Attachments\Contracts\AttachmentContract;
  */
 class Attachment extends Model implements AttachmentContract
 {
+    use SoftDeletes;
 
     protected $table = 'attachments';
 
