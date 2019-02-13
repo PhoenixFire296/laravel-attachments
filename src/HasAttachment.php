@@ -72,6 +72,7 @@ trait HasAttachment
         /** @var Attachment $attachment */
         $attachment = new Attachment($attributes);
         $attachment->filepath = ! empty($attributes['filepath']) ? $attributes['filepath'] : null;
+        $attachment->setParentModel($this);
 
         if (is_resource($fileOrPath)) {
             if (empty($options['filename'])) {

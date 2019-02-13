@@ -11,6 +11,7 @@ use Storage;
 use Symfony\Component\HttpFoundation\File\File as FileObj;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Bnb\Laravel\Attachments\Contracts\AttachmentContract;
+use ReflectionClass;
 
 /**
  * @property int    id
@@ -47,6 +48,8 @@ class Attachment extends Model implements AttachmentContract
     ];
 
     protected $observables = ['outputting'];
+
+    protected $parentModel = null;
 
     /*
      * Constructors
@@ -424,14 +427,21 @@ class Attachment extends Model implements AttachmentContract
 
 
     /**
-     * Generates a partition for the file.
+     * Utilizes parentModel to generate a partition for the file.
+     * return /{parentModel::shortClassName}/{parentModel::id}/
+     *
+     * If parentModel is not set, utilizes UUID to generate a partition for the file.
      * return /ABC/DE1/234 for an name of ABCDE1234.
      *
      * @return mixed
      */
     protected function getPartitionDirectory()
     {
-        return implode('/', array_slice(str_split($this->uuid, 3), 0, 3)) . '/';
+        if (is_null($this->parentModel)) {
+            return implode('/', array_slice(str_split($this->uuid, 3), 0, 3)) . '/';
+        }
+        $reflect = new ReflectionClass($this->parentModel);
+        return $reflect->getShortName().'/'.$this->parentModel->id.'/';
     }
 
 
@@ -567,5 +577,9 @@ class Attachment extends Model implements AttachmentContract
     public function getConnectionName()
     {
         return config('attachments.database.connection') ?? $this->connection;
+    }
+
+    public function setParentModel(object $model) {
+        $this->parentModel = $model;
     }
 }
